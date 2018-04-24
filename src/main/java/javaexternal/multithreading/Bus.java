@@ -1,5 +1,8 @@
 package javaexternal.multithreading;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
@@ -14,6 +17,8 @@ public class Bus implements Runnable {
     private int iterationCount = 0;
     private final BusStop lastStop;
     private int numOfIterations;
+    private static Logger rootLogger = LogManager.getRootLogger();
+    private static Logger logger = LogManager.getLogger(Bus.class.getSimpleName());
 
     public Bus(int num, Collection<BusStop> route, int numOfIterations) {
         this.id = num;
@@ -37,7 +42,7 @@ public class Bus implements Runnable {
             try {
                 currentSemaphore.acquire();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                rootLogger.error(e.getMessage());
             }
             stop();
 
@@ -49,30 +54,30 @@ public class Bus implements Runnable {
 
     public void move() {
         currentSemaphore = targetStop.getSemaphore();
-        System.out.println(this + " moved to " + targetStop);
+        logger.info(this + " moved to " + targetStop);
         try {
             sleep(300);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            rootLogger.error(e.getMessage());
         }
-        System.out.println(this + " arrived to " + targetStop);
+        logger.info(this + " arrived to " + targetStop);
     }
 
     public void stop() {
-        System.out.println(this + " stopped at " + targetStop);
+        logger.info(this + " stopped at " + targetStop);
         targetStop.addBus(this);
-        System.out.println("Buses at " + targetStop + ": " + targetStop.getBuses());
+        logger.info("Buses at " + targetStop + ": " + targetStop.getBuses());
         try {
             sleep(targetStop.getMaxBuses() * 50);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            rootLogger.error(e.getMessage());
         }
     }
 
     public void leave() {
         targetStop.removeBus(this);
-        System.out.println(this + " leaved " + targetStop);
-        System.out.println("Buses at " + targetStop + ": " + targetStop.getBuses());
+        logger.info(this + " leaved " + targetStop);
+        logger.info("Buses at " + targetStop + ": " + targetStop.getBuses());
     }
 
     @Override
