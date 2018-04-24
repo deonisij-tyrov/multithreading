@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 
 public class BusStop {
@@ -16,7 +17,7 @@ public class BusStop {
         this.name = name;
         this.maxBuses = maxBuses;
         this.semaphore = new Semaphore(maxBuses, true);
-        buses = Collections.synchronizedList(new ArrayList<Bus>());
+        buses = new CopyOnWriteArrayList<>();
     }
 
     public Semaphore getSemaphore() {

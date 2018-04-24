@@ -17,15 +17,14 @@ public class Bus implements Runnable {
     private int iterationCount = 0;
     private final BusStop lastStop;
     private int numOfIterations;
-    private static Logger rootLogger = LogManager.getRootLogger();
-    private static Logger logger = LogManager.getLogger(Bus.class.getSimpleName());
+    private static Logger logger = LogManager.getRootLogger();
 
     public Bus(int num, Collection<BusStop> route, int numOfIterations) {
         this.id = num;
         this.route = new LinkedList<>(route);
         lastStop = this.route.peekLast();
         this.numOfIterations = numOfIterations;
-        new Thread(this, "Bus " + 1).start();
+        new Thread(this, "Bus " + num).start();
     }
 
     @Override
@@ -42,7 +41,7 @@ public class Bus implements Runnable {
             try {
                 currentSemaphore.acquire();
             } catch (InterruptedException e) {
-                rootLogger.error(e.getMessage());
+                logger.error(e.getMessage());
             }
             stop();
 
@@ -58,7 +57,7 @@ public class Bus implements Runnable {
         try {
             sleep(300);
         } catch (InterruptedException e) {
-            rootLogger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
         logger.info(this + " arrived to " + targetStop);
     }
@@ -70,7 +69,7 @@ public class Bus implements Runnable {
         try {
             sleep(targetStop.getMaxBuses() * 50);
         } catch (InterruptedException e) {
-            rootLogger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

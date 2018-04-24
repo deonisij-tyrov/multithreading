@@ -11,7 +11,7 @@ import java.util.*;
 import static java.lang.Thread.sleep;
 
 public class BusesMain {
-    private static Logger rootLogger = LogManager.getRootLogger();
+    private static Logger logger = LogManager.getRootLogger();
 
     public static void main(String[] args) {
         // Get stops data from a file
@@ -24,7 +24,7 @@ public class BusesMain {
                 stopsDataMap.put(data[0], Integer.parseInt(data[1]));
             }
         } catch (IOException e) {
-            rootLogger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
 
         // Create a list of stops
@@ -47,7 +47,7 @@ public class BusesMain {
             try {
                 sleep((int) ((minInterval + maxInterval) / 2 * Math.random()));
             } catch (InterruptedException e) {
-                rootLogger.error(e.getMessage());
+                logger.error(e.getMessage());
             }
         }
     }
