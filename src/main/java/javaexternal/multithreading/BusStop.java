@@ -1,6 +1,7 @@
 package javaexternal.multithreading;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
@@ -15,7 +16,7 @@ public class BusStop {
         this.name = name;
         this.maxBuses = maxBuses;
         this.semaphore = new Semaphore(maxBuses, true);
-        buses = new ArrayList<>();
+        buses = Collections.synchronizedList(new ArrayList<Bus>());
     }
 
     public Semaphore getSemaphore() {
